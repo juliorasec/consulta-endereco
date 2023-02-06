@@ -1,14 +1,12 @@
 package features;
 
 import br.com.cep.model.dto.AddressDTO;
-import br.com.cep.model.dto.RequestDTO;
 import br.com.cep.templates.model.AddressDtoTemplate;
 import br.com.cep.util.ValidationsCep;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class StepDefinition {
-    private RequestDTO requestDTO;
+    private String cep;
     private AddressDTO addressDTO;
     private final AddressDtoTemplate addressDtoTemplate = AddressDtoTemplate.getInstance();
 
@@ -28,8 +26,7 @@ public class StepDefinition {
 
     @Given("que eu informei o CEP {int}")
     public void que_eu_informei_o_cep(Integer cep) {
-        requestDTO = new RequestDTO();
-        requestDTO.setCep(String.valueOf(cep));
+        this.cep = String.valueOf(cep);
     }
 
     @When("eu solicito a consulta do endereço")
@@ -46,6 +43,6 @@ public class StepDefinition {
     @Then("^a mensagem de erro correta é gerado")
     public void a_mensagem_de_erro_correta_é_gerado() {
         validationsCep = new ValidationsCep();
-        assertThrows(IllegalArgumentException.class,() -> validationsCep.validateCEP(requestDTO.getCep()));
+        assertThrows(IllegalArgumentException.class,() -> validationsCep.validateCEP(cep));
     }
 }

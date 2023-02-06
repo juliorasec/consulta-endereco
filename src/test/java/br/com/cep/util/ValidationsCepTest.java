@@ -1,7 +1,6 @@
 package br.com.cep.util;
 
 import br.com.cep.model.Address;
-import br.com.cep.model.dto.RequestDTO;
 import br.com.cep.templates.model.AddressDtoTemplate;
 import br.com.cep.templates.model.AddressTemplate;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,8 @@ public class ValidationsCepTest {
 
     private final AddressTemplate addressTemplate = AddressTemplate.getInstance();
     private final AddressDtoTemplate addressDtoTemplate = AddressDtoTemplate.getInstance();
+    private final String cepValid = "01001-000";
+    private final String cepInvalid = "0100100000";
 
     @InjectMocks
     private ValidationsCep validationsCep;
@@ -33,16 +34,13 @@ public class ValidationsCepTest {
 
     @Test
     void shouldReturnCepValid() {
-        RequestDTO requestDTO = new RequestDTO("01001-000");
-
-        boolean value = validationsCep.validateCEP(requestDTO.getCep());
+        boolean value = validationsCep.validateCEP(cepValid);
         assertEquals(true, value);
     }
 
     @Test
     void shouldReturnCepInvalid() {
-        RequestDTO requestDTO = new RequestDTO("0100100000");
-        assertThrows(IllegalArgumentException.class,() -> validationsCep.validateCEP(requestDTO.getCep()));
+        assertThrows(IllegalArgumentException.class,() -> validationsCep.validateCEP(cepInvalid));
     }
 
     @Test

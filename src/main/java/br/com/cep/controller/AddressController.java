@@ -1,15 +1,17 @@
 package br.com.cep.controller;
 
 import br.com.cep.model.dto.AddressDTO;
-import br.com.cep.model.dto.RequestDTO;
 import br.com.cep.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("v2/consulta-endereco")
@@ -19,9 +21,9 @@ public class AddressController {
 
     private final AddressService service;
 
-    @PostMapping
-    public ResponseEntity<AddressDTO> getAddress(@RequestBody RequestDTO requestDTO) {
-        return ResponseEntity.ok(service.getAddressByCep(requestDTO));
+    @GetMapping(value = "/{cep}")
+    public ResponseEntity<AddressDTO> getAddress(@NotNull @Valid @PathVariable final String cep) {
+        return ResponseEntity.ok(service.getAddressByCep(cep));
     }
 }
 

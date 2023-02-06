@@ -1,7 +1,6 @@
 package br.com.cep.controller;
 
 import br.com.cep.model.dto.AddressDTO;
-import br.com.cep.model.dto.RequestDTO;
 import br.com.cep.service.AddressService;
 import br.com.cep.templates.model.AddressDtoTemplate;
 import org.junit.jupiter.api.Test;
@@ -30,11 +29,11 @@ public class AddressControllerTest {
     void shouldReturnAddressByCep() throws Exception {
 
         AddressDTO addressDTO = addressDtoTemplate.getAddressDtoValid();
-        RequestDTO requestDTO = new RequestDTO("01001-000");
+        String cep = "01001-000";
 
-        BDDMockito.when(addressService.getAddressByCep(ArgumentMatchers.any(RequestDTO.class))).thenReturn(addressDTO);
+        BDDMockito.when(addressService.getAddressByCep(cep)).thenReturn(addressDTO);
 
-        ResponseEntity<AddressDTO> response = addressController.getAddress(requestDTO);
+        ResponseEntity<AddressDTO> response = addressController.getAddress(cep);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(addressDTO, response.getBody());

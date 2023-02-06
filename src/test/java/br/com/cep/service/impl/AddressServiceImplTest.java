@@ -4,7 +4,6 @@ import br.com.cep.converter.AddressDtoConverter;
 import br.com.cep.util.ValidationsCep;
 import br.com.cep.model.Address;
 import br.com.cep.model.dto.AddressDTO;
-import br.com.cep.model.dto.RequestDTO;
 import br.com.cep.service.partner.ViaCepClient;
 import br.com.cep.templates.model.AddressDtoTemplate;
 import br.com.cep.templates.model.AddressTemplate;
@@ -41,25 +40,25 @@ public class AddressServiceImplTest {
 
         AddressDTO addressDTO = addressDtoTemplate.getAddressDtoValid();
         Address address = addressTemplate.getAddressValid();
-        RequestDTO requestDTO = new RequestDTO("01001-000");
+        String cep = "01001-000";
 
-        BDDMockito.when(validationsCep.validateCEP(requestDTO.getCep())).thenReturn(true);
-        BDDMockito.when(viaCepClient.findAddressByCep(requestDTO.getCep())).thenReturn(address);
+        BDDMockito.when(validationsCep.validateCEP(cep)).thenReturn(true);
+        BDDMockito.when(viaCepClient.findAddressByCep(cep)).thenReturn(address);
         BDDMockito.when(validationsCep.checksRegion(address.getUf())).thenReturn("Sudeste");
         BDDMockito.when(validationsCep.getValueFrete("Sudeste")).thenReturn(addressDTO.getFrete());
         BDDMockito.when(addressDtoConverter.converterAddressDto(address, addressDTO.getFrete())).thenReturn(addressDTO);
 
-        AddressDTO response = addressServiceImpl.getAddressByCep(requestDTO);
+        AddressDTO response = addressServiceImpl.getAddressByCep(cep);
 
         assertEquals(addressDTO, response);
     }
 
     @Test
     void shouldReturnAddressByCepWithoutSuccess() throws Exception {
-        RequestDTO requestDTO = new RequestDTO("01001-000");
+        String cep = "01001-000";
 
-        BDDMockito.when(validationsCep.validateCEP(requestDTO.getCep())).thenReturn(true);
+        BDDMockito.when(validationsCep.validateCEP(cep)).thenReturn(true);
 
-        assertThrows(NullPointerException.class,() -> addressServiceImpl.getAddressByCep(requestDTO));
+        assertThrows(NullPointerException.class,() -> addressServiceImpl.getAddressByCep(cep));
     }
 }
