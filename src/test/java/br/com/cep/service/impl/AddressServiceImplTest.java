@@ -34,7 +34,7 @@ public class AddressServiceImplTest {
     private AddressServiceImpl addressServiceImpl;
 
     @Mock
-    private ValidationsCep validationsCepConverter;
+    private ValidationsCep validationsCep;
 
     @Test
     void shouldReturnAddressByCep() throws Exception {
@@ -43,10 +43,10 @@ public class AddressServiceImplTest {
         Address address = addressTemplate.getAddressValid();
         RequestDTO requestDTO = new RequestDTO("01001-000");
 
-        BDDMockito.when(validationsCepConverter.validateCEP(requestDTO.getCep())).thenReturn(true);
+        BDDMockito.when(validationsCep.validateCEP(requestDTO.getCep())).thenReturn(true);
         BDDMockito.when(viaCepClient.findAddressByCep(requestDTO.getCep())).thenReturn(address);
-        BDDMockito.when(validationsCepConverter.checksRegion(address.getUf())).thenReturn("Sudeste");
-        BDDMockito.when(validationsCepConverter.getValueFrete("Sudeste")).thenReturn(addressDTO.getFrete());
+        BDDMockito.when(validationsCep.checksRegion(address.getUf())).thenReturn("Sudeste");
+        BDDMockito.when(validationsCep.getValueFrete("Sudeste")).thenReturn(addressDTO.getFrete());
         BDDMockito.when(addressDtoConverter.converterAddressDto(address, addressDTO.getFrete())).thenReturn(addressDTO);
 
         AddressDTO response = addressServiceImpl.getAddressByCep(requestDTO);
@@ -58,7 +58,7 @@ public class AddressServiceImplTest {
     void shouldReturnAddressByCepWithoutSuccess() throws Exception {
         RequestDTO requestDTO = new RequestDTO("01001-000");
 
-        BDDMockito.when(validationsCepConverter.validateCEP(requestDTO.getCep())).thenReturn(true);
+        BDDMockito.when(validationsCep.validateCEP(requestDTO.getCep())).thenReturn(true);
 
         assertThrows(NullPointerException.class,() -> addressServiceImpl.getAddressByCep(requestDTO));
     }
