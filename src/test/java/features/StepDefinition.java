@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.Assert.assertNotNull;
@@ -21,8 +22,9 @@ public class StepDefinition {
     private AddressDTO addressDTO;
     private final AddressDtoTemplate addressDtoTemplate = AddressDtoTemplate.getInstance();
 
-    @InjectMocks
+    @Mock
     private ValidationsCep validationsCep;
+
 
     @Given("que eu informei o CEP {int}")
     public void que_eu_informei_o_cep(Integer cep) {
@@ -32,6 +34,7 @@ public class StepDefinition {
 
     @When("eu solicito a consulta do endereço")
     public void eu_solicito_a_consulta_do_endereço() {
+        
         addressDTO = addressDtoTemplate.getAddressDtoValid();
     }
 
@@ -42,6 +45,7 @@ public class StepDefinition {
 
     @Then("^a mensagem de erro correta é gerado")
     public void a_mensagem_de_erro_correta_é_gerado() {
-        assertThrows(NullPointerException.class,() -> validationsCep.validateCEP(requestDTO.getCep()));
+        validationsCep = new ValidationsCep();
+        assertThrows(IllegalArgumentException.class,() -> validationsCep.validateCEP(requestDTO.getCep()));
     }
 }
